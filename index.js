@@ -10,6 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 
+
+
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -91,14 +93,16 @@ async function run() {
     app.get('/item', verifyJWT, async (req, res) => {
       const decodedEmail = req.decoded.email;
       const email = req.query.email;
+
+
       if (email === decodedEmail) {
         const query = { email: email };
         const cursor = inventoryCollection.find(query);
         const items = await cursor.toArray();
         res.send(items);
       }
-      else {
-        res.status(403).send({ message: 'Forbidden Access' })
+      else{
+        res.status(403).send({message: 'Forbidden Access'})
       }
     })
 

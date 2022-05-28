@@ -39,11 +39,19 @@ async function run() {
     });
 
 
-    // delete inventory item
+    // delete inventory item (DELETE)
     app.delete('/inventory/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await inventoryCollection.deleteOne(query);
+      res.send(result);
+    });
+
+
+    // add new inventory item (POST)
+    app.post('/inventory', async (req, res) => {
+      const newInventoryItem = req.body;
+      const result = await inventoryCollection.insertOne(newInventoryItem);
       res.send(result);
     })
 

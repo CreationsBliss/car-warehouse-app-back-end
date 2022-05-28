@@ -21,7 +21,7 @@ async function run() {
     await client.connect();
     const inventoryCollection = client.db('vehica_car_warehouse').collection('inventories');
 
-    // to get all inventory items
+    //  get all inventory items
     app.get('/inventory', async (req, res) => {
       const query = {};
       const cursor = inventoryCollection.find(query);
@@ -30,7 +30,7 @@ async function run() {
     });
 
 
-    // to get a single inventory item
+    //  get a single inventory item
     app.get('/inventory/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -53,6 +53,16 @@ async function run() {
       const newInventoryItem = req.body;
       const result = await inventoryCollection.insertOne(newInventoryItem);
       res.send(result);
+    });
+
+
+    // get user specific inventory item
+    app.get('/item', async (req, res) => {
+      const email = req.query.email;
+      const query = {email: email};
+      const cursor = inventoryCollection.find(query);
+      const items = await cursor.toArray();
+      res.send(items);
     })
 
 

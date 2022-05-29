@@ -11,7 +11,7 @@ app.use(express.json());
 
 
 
-
+// JWT
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
@@ -61,6 +61,30 @@ async function run() {
     });
 
 
+    // Increase product quantity
+    app.put("/inventory/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateQuantity = req.body;
+      console.log('Updated quantity', updateQuantity.quantity);
+      const filter = { _id: ObjectId(id) };
+      console.log(filter);
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: {
+          productQuantity: parseInt(updateQuantity.totalQuantity),
+        },
+      };
+      const result = await inventoryCollection.updateOne(
+        filter,
+        updateDoc,
+        option
+      );
+      console.log(result);
+      res.send(result);
+    });
+
+
+
     // delete inventory item (DELETE)
     app.delete('/inventory/:id', async (req, res) => {
       const id = req.params.id;
@@ -101,8 +125,8 @@ async function run() {
         const items = await cursor.toArray();
         res.send(items);
       }
-      else{
-        res.status(403).send({message: 'Forbidden Access'})
+      else {
+        res.status(403).send({ message: 'Forbidden Access' })
       }
     })
 

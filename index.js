@@ -61,7 +61,7 @@ async function run() {
     });
 
 
-    // Increase product quantity
+    // increase & decrease product quantity
     app.put("/inventory/:id", async (req, res) => {
       const id = req.params.id;
       const updateQuantity = req.body;
@@ -82,7 +82,6 @@ async function run() {
       console.log(result);
       res.send(result);
     });
-
 
 
     // delete inventory item (DELETE)
@@ -117,7 +116,6 @@ async function run() {
     app.get('/item', verifyJWT, async (req, res) => {
       const decodedEmail = req.decoded.email;
       const email = req.query.email;
-
 
       if (email === decodedEmail) {
         const query = { email: email };
